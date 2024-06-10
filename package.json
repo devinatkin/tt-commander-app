@@ -17,6 +17,7 @@
   "author": "Uri Shaked",
   "license": "ISC",
   "dependencies": {
+    "@octokit/rest": "^20.1.1",
     "@suid/icons-material": "^0.6.11",
     "@suid/material": "^0.15.1",
     "@xterm/addon-fit": "^0.10.0",
