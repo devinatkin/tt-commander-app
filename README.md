@@ -1,7 +1,7 @@
 # tt-commander-app
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/TinyTapeout/tt-commander-app)
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/from-referrer/)
 
 Tiny Tapeout Commander App let you connect to a [Tiny Tapeout](https://www.tinytapeout.com) Demo Board and control it from your browser. You can select the active design and set the clock frequency.
 
