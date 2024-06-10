@@ -11,4 +11,4 @@ test("Extract Forks from TT04 Submission Template from Repository URL", async ()
     expect(forks).toContain("https://github.com/TinyTapeout/tt04-osu-demo");
     expect(forks).toContain("https://github.com/TinyTapeout/tt-chip-rom");
     expect(forks).toContain("https://github.com/urish/tt04-simon-game")
-});
+},30000);
