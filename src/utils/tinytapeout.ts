@@ -19,3 +19,46 @@ export async function extractTTProjects(shuttle_index_url: string) : Promise<str
     }
     return projectRepos;
 }
+
+/**
+ * Interact with https://index.tinytapeout.com/ to retrieve and return a list of shuttles. (Since TT02)
+ * @returns {Promise<string[]|null>}
+ */
+export async function retrieveTTShuttleIDs(): Promise<string[] | null> {
+    const response = await fetch("https://index.tinytapeout.com")
+    const data = await response.json();
+
+    const shuttleIDs: string[] = []
+
+    const shuttles = data.shuttles;
+    for (let shuttle of shuttles){
+        shuttleIDs.push(shuttle.id)
+    }
+    return shuttleIDs;
+}
+
+/** Interact with https://index.tinytapeout.com/ to retrieve and return a list of shuttles plus additional information. (Since TT02)
+ *  
+ */
+export async function retrieveTTShuttles(){
+    const response = await fetch("https://index.tinytapeout.com")
+    const data = await response.json();
+    return data.shuttles;
+}
+
+/**
+ * Interact with https://index.tinytapeout.com/ to retrieve and return a list of project repos. (Since TT02)
+ * 
+ */
+export async function retrieveTTProjects(id: string): Promise<string[] | null>{
+    const url = `https://index.tinytapeout.com/${id}.json`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const repos: string[] = [];
+
+    for (let project of data.projects){
+        repos.push(project.repo)
+    }
+    return repos;
+}
