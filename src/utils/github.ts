@@ -69,8 +69,60 @@ export async function extractForksFromURL(githubURL: string): Promise<string[] |
     }
 
     return forkURLs;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching forks:', error);
+    return null;
+  }
+}
+
+/**
+ * Fetches test code from a given GitHub repository.
+ * 
+ * @param {string} repoURL - The URL of the GitHub repository.
+ * @param {string} path - The path within the repo to fetch data from.
+ * @param {string} branch - The branch to fetch data from.
+ * @returns {Promise<string[] | null>} - An array of files in the specified path.
+ */
+export async function fetchTestCode(repoURL: string, path = "/test/commander", branch = "main") {
+  // Verify the API key exists
+  const apiKey = process.env.GH_API_KEY;
+  if (!apiKey) {
+    throw new Error('GH_API_KEY is not defined in the environment variables.');
+  }
+
+  // Initialize Octokit
+  const octokit = new Octokit({ auth: apiKey });
+
+  const repository = extractRepoFromURL(repoURL);
+  if (!repository) {
+    throw new Error('Invalid GitHub URL.');
+  }
+  const [owner, repo] = repository.split('/');
+
+  try {
+    const { data } = await octokit.repos.getContent({
+      owner,
+      repo,
+      path,
+      ref: branch
+    });
+
+    // Check if the returned data is a single file or a directory listing
+    if (Array.isArray(data)) {
+      // Return the list of file paths in the directory
+      return data;
+    } else {
+      console.error("Path points to a file, not a directory.");
+      return null;
+    }
+
+  } catch (error: any) {
+    if (error.status === 404) {
+      // As not everyone will implement a test file, this needs to be informational, not an error
+      console.info("Not Found");
+    } else {
+      console.error("Error Retrieving:", error);
+    }
     return null;
   }
 }
