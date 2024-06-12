@@ -111,7 +111,7 @@ export function BoardConfigPanel(props: IBoardConfigPanelProps) {
       <Stack direction="row" spacing={1} marginBottom={1}>
         <TextField
           sx={{ maxWidth: 120 }}
-          label="Clock speed (Hz)"
+          label="Clock Speed (Hz)"
           type="number"
           size="small"
           value={deviceState.clockHz}
