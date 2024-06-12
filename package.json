@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "vite",
+    "start-hosted": "vite --host",
     "build": "vite build",
     "prepare": "husky",
     "test": "jest"
