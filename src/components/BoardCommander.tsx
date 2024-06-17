@@ -14,12 +14,13 @@ import { DebugLogs } from './DebugLogs';
 import { InteractPanel } from './InteractPanel';
 import { PinoutPanel } from './PinoutPanel';
 import { ReplPanel } from './ReplPanel';
+import { TestPanel } from './TestPanel';
 
 export interface IBreakoutControlProps {
   device: TTBoardDevice;
 }
 
-type ITabName = 'config' | 'interact' | 'pinout' | 'repl';
+type ITabName = 'config' | 'interact' | 'pinout' | 'repl' | 'tests';
 
 export function BoardCommander(props: IBreakoutControlProps) {
   const [activeTab, setActiveTab] = createSignal<ITabName>('config');
@@ -106,6 +107,13 @@ export function BoardCommander(props: IBreakoutControlProps) {
           >
             REPL
           </Button>
+          <Button
+            onClick={() => setActiveTab('test')}
+            variant={activeTab() === 'test' ? 'contained' : 'outlined'}
+          >
+            TEST
+          </Button>
+
         </ButtonGroup>
         <Show when={activeTab() === 'config'}>
           <BoardConfigPanel device={props.device} />
@@ -118,6 +126,9 @@ export function BoardCommander(props: IBreakoutControlProps) {
         </Show>
         <Show when={activeTab() === 'repl'}>
           <ReplPanel device={props.device} />
+        </Show>
+        <Show when={activeTab() === 'test'}>
+          <TestPanel device={props.device} />
         </Show>
       </Paper>
 
