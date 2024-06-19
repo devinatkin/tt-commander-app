@@ -49,20 +49,21 @@ export function TestPanel(props: ITestPanelProps) {
     }
   });
 
-  const TestAll = () => {
+  const TestAll = async () => {
     console.log('Test All');
-    void props.device.sendCommand('tt.shuttle.test_all()');
+
+    const result = await props.device.testProjects();
+
+    console.log('Result:', result);
   };
 
-  const TestProject = (project) => {
-    console.log('Macro: ', project.macro);
-    console.log('Address: ', project.address);
-    console.log('Title: ', project.title);
-    console.log('Repo: ', project.repo);
-    console.log('Clock Hz: ', project.clock_hz);
+  const TestProject = async (project) => {
+    console.log('Testing: ', project.macro);
 
     // Send the command tt.shuttle.${project.macro}.test()
-    void props.device.sendCommand(`tt.shuttle.${project.macro}.run_test()`);
+    const result = await props.device.testProject(project);
+
+    console.log('Result:', result);
   };
 
   return (

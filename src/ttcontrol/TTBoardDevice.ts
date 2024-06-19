@@ -3,7 +3,7 @@
 
 import { createStore } from 'solid-js/store';
 import { factoryShuttleId, isFactoryMode } from '~/model/factory';
-import { loadShuttle } from '~/model/shuttle';
+import { loadShuttle, Project } from '~/model/shuttle';
 import { LineBreakTransformer } from '~/utils/LineBreakTransformer';
 import defaultFactory from './factory/default.py?raw';
 import tt03p5Factory from './factory/tt03p5.py?raw';
@@ -21,8 +21,8 @@ export const frequencyTable = [
   { title: '12 MHz', value: '12000000' },
   { title: '10 MHz', value: '10000000' },
   { title: '1 MHz', value: '1000000' },
-  { title: '50 kHz', value: '50000' },
-  { title: '10 kHz', value: '10000' },
+  { title: '50 KHz', value: '50000' },
+  { title: '10 KHz', value: '10000' },
 ];
 
 export interface ILogEntry {
@@ -92,6 +92,16 @@ export class TTBoardDevice extends EventTarget {
 
   async resetProject() {
     await this.sendCommand('reset_project()');
+  }
+
+  async testProjects(): Promise<string> {
+    await this.sendCommand(`tt.shuttle.test_all()\r`);
+    return 'Test all command sent.';
+  }
+
+  async testProject(project: Project): Promise<string> {
+    await this.sendCommand(`tt.shuttle.${project.macro}.run_test()\r`);
+    return `Test project ${project.macro} command sent.`;
   }
 
   async manualClock() {
