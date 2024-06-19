@@ -9,6 +9,7 @@ import { DebugLogs } from './DebugLogs';
 import { InteractPanel } from './InteractPanel';
 import { PinoutPanel } from './PinoutPanel';
 import { ReplPanel } from './ReplPanel';
+import { TestPanel } from './TestPanel';
 
 export interface IBreakoutControlProps {
   onDisconnect: () => void;
@@ -88,7 +89,7 @@ export function BoardCommander(props: IBreakoutControlProps) {
           <ReplPanel device={props.device} />
         </Show>
         <Show when={activeTab() === 'test'}>
-          <ReplPanel device={props.device} />
+          <TestPanel device={props.device} />
         </Show>
       </Paper>
 
