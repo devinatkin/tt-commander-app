@@ -21,8 +21,8 @@ export const frequencyTable = [
   { title: '12 MHz', value: '12000000' },
   { title: '10 MHz', value: '10000000' },
   { title: '1 MHz', value: '1000000' },
-  { title: '50 kHz', value: '50000' },
-  { title: '10 kHz', value: '10000' },
+  { title: '50 KHz', value: '50000' },
+  { title: '10 KHz', value: '10000' },
 ];
 
 export interface ILogEntry {
@@ -87,6 +87,14 @@ export class TTBoardDevice {
 
   async resetProject() {
     await this.sendCommand('reset_project()');
+  }
+
+  async testProjects() {
+    await this.sendCommand('tt.shuttle.test_all()');
+  }
+
+  async testProject(index: number) {
+    await this.sendCommand(`tt.shuttle.test(${index})`);
   }
 
   async manualClock() {
