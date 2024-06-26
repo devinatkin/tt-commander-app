@@ -3,6 +3,11 @@ import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css';
 import { TTBoardDevice } from '~/ttcontrol/TTBoardDevice';
 import { FitAddon } from '@xterm/addon-fit';
+import {
+  Button,
+  Stack,
+} from '@suid/material';
+import { React } from 'solid-js/web';
 
 export interface ITestPanelProps {
   device: TTBoardDevice;
@@ -37,5 +42,20 @@ export function TestPanel(props: ITestPanelProps) {
     });
   });
 
-  return <div ref={ref!} />;
+  const TestAll = () => {
+    console.log("Test All");
+    props.device.sendCommand("tt.shuttle.test_all()");
+    
+  };
+
+  return (
+    <>
+      <Stack direction="row" spacing={1} marginTop={2} marginBottom={2}>
+        <Button variant="contained" onClick={TestAll}>
+          Test Shuttle Projects
+        </Button>
+      </Stack>
+    </>
+  );
+  
 }
