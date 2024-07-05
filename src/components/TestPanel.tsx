@@ -54,7 +54,21 @@ export function TestPanel(props: ITestPanelProps) {
 
     const result = await props.device.testProjects();
 
-    console.log('Result:', result);
+    const url = `https://${window.location.hostname}:3000/store`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ TEST_RESULT: result }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to store test result');
+    }
+
+    console.log('Data stored');
   };
 
   const TestProject = async (project) => {
@@ -63,7 +77,21 @@ export function TestPanel(props: ITestPanelProps) {
     // Send the command tt.shuttle.${project.macro}.test()
     const result = await props.device.testProject(project);
 
-    console.log('Result:', result);
+    const url = `https://${window.location.hostname}:3000/store`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ TEST_RESULT: result }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to store test result');
+    }
+
+    console.log('Data stored');
   };
 
   return (
