@@ -95,13 +95,63 @@ export class TTBoardDevice extends EventTarget {
   }
 
   async testProjects(): Promise<string> {
-    await this.sendCommand(`tt.shuttle.test_all()\r`);
-    return 'Test all command sent.';
+    return new Promise<string>((resolve, reject) => {
+      let accumulatedData = '';
+
+      const previousListener = this.terminalListener;
+
+      const listener: TerminalListener = (data) => {
+        accumulatedData += data;
+
+        // Check for a specific end-of-output marker
+        if (accumulatedData.includes('MPY: soft reboot')) {
+          this.terminalListener = previousListener; // Restore the previous listener
+          resolve(accumulatedData); // Resolve the promise with the accumulated data
+        }
+
+        // Optionally call the previous listener if it exists
+        if (previousListener) {
+          previousListener(data);
+        }
+      };
+
+      this.terminalListener = listener;
+
+      this.sendCommand(`tt.shuttle.test_all()\r`).catch((error) => {
+        this.terminalListener = previousListener; // Restore the previous listener on error
+        reject(error);
+      });
+    });
   }
 
   async testProject(project: Project): Promise<string> {
-    await this.sendCommand(`tt.shuttle.${project.macro}.run_test()\r`);
-    return `Test project ${project.macro} command sent.`;
+    return new Promise<string>((resolve, reject) => {
+      let accumulatedData = '';
+
+      const previousListener = this.terminalListener;
+
+      const listener: TerminalListener = (data) => {
+        accumulatedData += data;
+
+        // Check for a specific end-of-output marker
+        if (accumulatedData.includes('MPY: soft reboot')) {
+          this.terminalListener = previousListener; // Restore the previous listener
+          resolve(accumulatedData); // Resolve the promise with the accumulated data
+        }
+
+        // Optionally call the previous listener if it exists
+        if (previousListener) {
+          previousListener(data);
+        }
+      };
+
+      this.terminalListener = listener;
+
+      this.sendCommand(`tt.shuttle.${project.macro}.run_test()\r`).catch((error) => {
+        this.terminalListener = previousListener; // Restore the previous listener on error
+        reject(error);
+      });
+    });
   }
 
   async manualClock() {
