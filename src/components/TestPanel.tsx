@@ -54,7 +54,7 @@ export function TestPanel(props: ITestPanelProps) {
 
     const result = await props.device.testProjects();
 
-    const url = `https://${window.location.hostname}:3000/store`;
+    const url = `https://${window.location.hostname}/store`;
 
     const response = await fetch(url, {
       method: 'POST',
@@ -77,7 +77,7 @@ export function TestPanel(props: ITestPanelProps) {
     // Send the command tt.shuttle.${project.macro}.test()
     const result = await props.device.testProject(project);
 
-    const url = `https://${window.location.hostname}:3000/store`;
+    const url = `https://${window.location.hostname}/store`;
 
     const response = await fetch(url, {
       method: 'POST',
