@@ -1,0 +1,8 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-f', 'Backend.Dockerfile', '-t', 'us-central1-docker.pkg.dev/atkin-1/cloud-run-source-deploy/commander-backend:latest', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-f', 'Frontend.Dockerfile', '-t', 'us-central1-docker.pkg.dev/atkin-1/cloud-run-source-deploy/commander-frontend:latest', '.']
+images:
+- 'us-central1-docker.pkg.dev/atkin-1/cloud-run-source-deploy/commander-backend:latest'
+- 'us-central1-docker.pkg.dev/atkin-1/cloud-run-source-deploy/commander-frontend:latest'
