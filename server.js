@@ -2,9 +2,11 @@
 import express from 'express';
 import cors from 'cors';
 import https from 'https';
+import http from 'http';
 import fs from 'fs';
-
 import { Storage } from '@google-cloud/storage';
+
+// Initialize Google Cloud Storage
 const storage = new Storage({
   projectId: 'atkin-1',
 });
@@ -49,19 +51,33 @@ app.post('/store', (req, res) => {
 const privateKeyPath = 'key.pem'; // Update this path
 const certificatePath = 'cert.pem'; // Update this path
 
-// Reading the SSL certificate and private key
-const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
-const certificate = fs.readFileSync(certificatePath, 'utf8');
+let httpsServer;
+const httpsPort = 3000;
 
-const credentials = { key: privateKey, cert: certificate };
+try {
+  // Reading the SSL certificate and private key
+  const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
+  const certificate = fs.readFileSync(certificatePath, 'utf8');
+  const credentials = { key: privateKey, cert: certificate };
 
-// Creating HTTPS server
-const httpsServer = https.createServer(credentials, app);
+  // Creating HTTPS server
+  httpsServer = https.createServer(credentials, app);
 
-// Define HTTPS port
-const httpsPort = 3000; // You can use another port if 443 is not available
+  // Start the HTTPS server
+  httpsServer.listen(httpsPort, () => {
+    console.log(`HTTPS Server is listening at https://localhost:${httpsPort}/`);
+  });
+} catch (error) {
+  console.error('SSL certificates not found or could not be read. Falling back to HTTP.');
 
-// Start the HTTPS server
-httpsServer.listen(httpsPort, () => {
-  console.log(`Server is listening at https://localhost:${httpsPort}/`);
-});
+  // Define HTTP port
+  const httpPort = 3000; // Change this port if needed
+
+  // Creating HTTP server
+  const httpServer = http.createServer(app);
+
+  // Start the HTTP server
+  httpServer.listen(httpPort, () => {
+    console.log(`HTTP Server is listening at http://localhost:${httpPort}/`);
+  });
+}

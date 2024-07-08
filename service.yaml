@@ -1,0 +1,23 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  annotations:
+    run.googleapis.com/launch-stage: BETA
+  name: tt-commander
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/execution-environment: gen1
+        run.googleapis.com/container-dependencies: "{frontend: [backend]}" #frontend depends on backend
+    spec:
+      containers:
+      - image: us-central1-docker.pkg.dev/atkin-1/cloud-run-source-deploy/commander-frontend:latest
+        name: frontend
+        ports:
+          - containerPort: 5173
+      - image: us-central1-docker.pkg.dev/atkin-1/cloud-run-source-deploy/commander-backend:latest
+        name: backend
+        startupProbe:
+          tcpSocket:
+            port: 3000
