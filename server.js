@@ -5,6 +5,7 @@ import https from 'https';
 import http from 'http';
 import fs from 'fs';
 import { Storage } from '@google-cloud/storage';
+import { fetchLatestUF2Artifact } from './src/utils/github';
 
 // Initialize Google Cloud Storage
 const storage = new Storage({
@@ -27,6 +28,7 @@ app.get('/api', (_req, res) => {
   res.send('Commander App Backend is running');
 });
 
+// Define a POST route to store data in Google Cloud Storage
 app.post('/api/store', (req, res) => {
   const data = req.body;
   console.log('POST received from client');
@@ -45,6 +47,16 @@ app.post('/api/store', (req, res) => {
       res.status(200).send('Data saved');
     }
   });
+});
+
+// Define a GET route to retrieve the latest UF2 file from Github Artifacts
+app.get('/api/latestUF2', (_req, res) => {
+  const filepath = fetchLatestUF2Artifact();
+  if (filepath) {
+    res.sendFile(filepath);
+  } else {
+    res.status(404).send('UF2 File not found');
+  }
 });
 
 // SSL certificate paths
