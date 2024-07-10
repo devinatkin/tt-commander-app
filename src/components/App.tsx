@@ -3,7 +3,7 @@
 
 /// <reference types="dom-serial" />
 
-import { AppBar, CssBaseline, Stack, ThemeProvider, Typography } from '@suid/material';
+import { AppBar, CssBaseline, Link, Stack, ThemeProvider, Typography } from '@suid/material';
 import { Show, createSignal, onCleanup, onMount } from 'solid-js';
 import { TTBoardDevice } from '~/ttcontrol/TTBoardDevice';
 import { theme } from '~/utils/theme';
@@ -89,6 +89,12 @@ export function App() {
               <BoardCommander device={device()} onDisconnect={() => setBreakoutDevice(null)} />
             )}
           </Show>
+
+          <Stack mt={2}>
+            <Link href="/api/latestUF2" variant="body1">
+              Latest UF2 Download
+            </Link>
+          </Stack>
         </Stack>
 
         <Footer />
