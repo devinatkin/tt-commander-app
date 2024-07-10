@@ -200,3 +200,13 @@ export function getLatestArtifact(
     return null;
   }
 }
+
+export async function fetchLatestUF2Artifact(repoURL: string) {
+  const artifacts = await fetchArtifacts(repoURL, true);
+
+  if (artifacts) {
+    return getLatestArtifact(artifacts, 'UF2 Artifact');
+  }
+
+  return null;
+}
