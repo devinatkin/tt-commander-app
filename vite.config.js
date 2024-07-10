@@ -33,7 +33,7 @@ export default defineConfig({
     https: httpsOptions,
     port: process.env.PORT || 5173,
     proxy: {
-      '/store': {
+      '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,
       },
