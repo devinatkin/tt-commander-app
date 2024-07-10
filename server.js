@@ -27,7 +27,7 @@ app.get('/', (_req, res) => {
   res.send('Commander App Backend is running');
 });
 
-app.post('/store', (req, res) => {
+app.post('/api/store', (req, res) => {
   const data = req.body;
   console.log('POST received from client');
 
