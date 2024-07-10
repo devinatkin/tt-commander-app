@@ -23,7 +23,7 @@ app.use(
 app.use(express.json());
 
 // Define a simple route to check the server setup
-app.get('/', (_req, res) => {
+app.get('/api', (_req, res) => {
   res.send('Commander App Backend is running');
 });
 
