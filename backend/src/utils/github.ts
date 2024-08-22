@@ -202,11 +202,16 @@ export function getLatestArtifact(
 }
 
 export async function fetchLatestUF2Artifact(repoURL: string) {
-  const artifacts = await fetchArtifacts(repoURL, true);
+  try {
+    const artifacts = await fetchArtifacts(repoURL, true);
 
-  if (artifacts) {
-    return getLatestArtifact(artifacts, 'UF2 Artifact');
+    if (artifacts) {
+      return getLatestArtifact(artifacts, 'UF2 Artifact');
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Error fetching artifacts:', error);
+    return null;
   }
-
-  return null;
 }
