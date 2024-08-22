@@ -50,10 +50,12 @@ app.post('/api/store', (req, res) => {
 });
 
 // Define a GET route to retrieve the latest UF2 file from Github Artifacts
-app.get('/api/latestUF2', (_req, res) => {
+app.get('/api/latestUF2', async (_req, res) => {
   try {
-    const filepath = fetchLatestUF2Artifact();
+    const filepath = await fetchLatestUF2Artifact(process.env.FIRMWARE_REPO);
+    
     if (filepath) {
+      res.setHeader('Content-Disposition', `attachment; filename="latest_firmware.uf2"`);
       res.sendFile(filepath);
     } else {
       res.status(404).send('UF2 File not found');
