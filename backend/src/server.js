@@ -5,7 +5,7 @@ import https from 'https';
 import http from 'http';
 import fs from 'fs';
 import { Storage } from '@google-cloud/storage';
-import { fetchLatestUF2Artifact } from './src/utils/github';
+import { fetchLatestUF2Artifact } from './utils/github.js';
 
 // Initialize Google Cloud Storage
 const storage = new Storage({

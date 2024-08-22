@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "allowJs": true,      // Allow JavaScript files to coexist with TypeScript files
+    "checkJs": false      // Do not check JavaScript files (optional)
+  },
+  "exclude": ["src/**/*.js"],
+  "include": ["src/**/*.ts"]
+}

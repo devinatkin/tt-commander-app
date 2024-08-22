@@ -8,13 +8,13 @@ RUN apk add --no-cache git
 WORKDIR /app
 
 # Copy the package.json and package-lock.json files to the working directory
-COPY package*.json ./
+COPY ./frontend/package*.json ./
 
 # Install dependencies
 RUN npm install
 
 # Copy the rest of the application files to the working directory
-COPY . .
+COPY ./frontend/ ./
 
 # Expose the port that your app runs on
 EXPOSE 5173
