@@ -1,7 +1,11 @@
 import { Octokit } from '@octokit/rest';
+import * as fs from 'fs'; // Add this line to import the 'fs' module
 
 // Import required modules
 import * as dotenv from 'dotenv';
+
+//Temporary Directory
+import { tmpdir } from 'os';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -201,12 +205,38 @@ export function getLatestArtifact(
   }
 }
 
-export async function fetchLatestUF2Artifact(repoURL: string) {
+/**
+ * Fetches the latest UF2 artifact from the repository and saves it to a temporary file.
+ *
+ * @param {string} repoURL - The URL of the GitHub repository.
+ * @returns {Promise<string|null>} - The path to the downloaded artifact file, or null if not found.
+ */
+export async function fetchLatestUF2Artifact(repoURL: string): Promise<string | null> {
   try {
     const artifacts = await fetchArtifacts(repoURL, true);
-
     if (artifacts) {
-      return getLatestArtifact(artifacts, 'UF2 Artifact');
+      const latestArtifactURL = getLatestArtifact(artifacts, 'UF2 Artifact');
+      if (!latestArtifactURL) {
+        console.error('No UF2 artifact found.');
+        return null;
+      }
+      
+      // Initialize Octokit for downloading the artifact
+      const octokit = new Octokit({ auth: process.env.GH_API_KEY });
+
+      // Download the latest artifact as a buffer
+      const response = await octokit.request('GET ' + latestArtifactURL, {
+        responseType: 'arraybuffer'
+      });
+
+      // Generate the temp file path
+      const tempDir = tmpdir();
+      const tempFilePath = `${tempDir}/latest_uf2_artifact.uf2`;
+
+      // Write the buffer data to a file
+      fs.writeFileSync(tempFilePath, Buffer.from(response.data));
+
+      return tempFilePath;
     }
 
     return null;
