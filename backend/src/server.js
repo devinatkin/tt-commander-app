@@ -51,11 +51,16 @@ app.post('/api/store', (req, res) => {
 
 // Define a GET route to retrieve the latest UF2 file from Github Artifacts
 app.get('/api/latestUF2', (_req, res) => {
-  const filepath = fetchLatestUF2Artifact();
-  if (filepath) {
-    res.sendFile(filepath);
-  } else {
-    res.status(404).send('UF2 File not found');
+  try {
+    const filepath = fetchLatestUF2Artifact();
+    if (filepath) {
+      res.sendFile(filepath);
+    } else {
+      res.status(404).send('UF2 File not found');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).sendFile('error.txt');
   }
 });
 
