@@ -1,0 +1,35 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Commander App Backend",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TinyTapeout/tt-commander-app.git"
+  },
+  "author": "Devin Atkin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TinyTapeout/tt-commander-app/issues"
+  },
+  "homepage": "https://github.com/TinyTapeout/tt-commander-app#readme",
+  "dependencies": {
+    "@google-cloud/storage": "^7.12.1",
+    "@octokit/rest": "^21.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "https": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "typescript": "^5.5.4"
+  }
+}

@@ -115,7 +115,7 @@ export async function fetchTestCode(repoURL: string, path = '/test/commander', b
       console.error('Path points to a file, not a directory.');
       return null;
     }
-  } catch (error: unknown) {
+  } catch (error: any) {
     if (error.status === 404) {
       // As not everyone will implement a test file, this needs to be informational, not an error
       console.info('Not Found');

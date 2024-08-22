@@ -8,16 +8,19 @@ RUN apk add --no-cache git
 WORKDIR /app
 
 # Copy the package.json and package-lock.json files to the working directory
-COPY package*.json ./
+COPY ./backend/package*.json ./
 
-# Install dependencies
+# Install dependencies (including TypeScript)
 RUN npm install
 
 # Copy the rest of the application files to the working directory
-COPY . .
+COPY ./backend/ ./
+
+# Compile TypeScript files in place
+RUN npx tsc
 
 # Expose the port that your app runs on
 EXPOSE 3000
 
 # Define the command to run your server.js file
-CMD ["node", "server.js"]
+CMD ["node", "src/server.js"]

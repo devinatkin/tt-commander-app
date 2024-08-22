@@ -5,9 +5,11 @@ import fs from 'fs';
 import { defineConfig } from 'vite';
 import solidPlugin from 'vite-plugin-solid';
 
+
 let commitHash = 'N/A';
 try {
-  commitHash = child.execSync('git rev-parse --short HEAD').toString().trim();
+  const gitRoot = path.resolve(__dirname, '..');
+  commitHash = execSync('git rev-parse --short HEAD', { cwd: gitRoot }).toString().trim();
 } catch (error) {
   console.warn('Not a git repository, using default commit hash.');
 }
