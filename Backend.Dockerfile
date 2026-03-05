@@ -11,7 +11,7 @@ WORKDIR /app
 COPY ./backend/package*.json ./
 
 # Install dependencies (including TypeScript)
-RUN npm install
+RUN npm ci --include=dev
 
 # Copy the rest of the application files to the working directory
 COPY ./backend/ ./
