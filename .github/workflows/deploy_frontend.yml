@@ -30,10 +30,8 @@ jobs:
         working-directory: ./frontend
 
       - name: Build
-        run: npm run build
+        run: npm run build --base=/tt-commander-app/frontend/
         working-directory: ./frontend
-        env:
-          BASE_URL: /tt-commander-app/
 
       - name: Upload artifact for GitHub Pages
         uses: actions/upload-pages-artifact@v4
