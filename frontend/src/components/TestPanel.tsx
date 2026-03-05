@@ -50,7 +50,7 @@ export function TestPanel(props: ITestPanelProps) {
   });
 
   const storeTestResult = async (result) => {
-    const url = `https://${window.location.hostname}/api/store`;
+    const url = `${import.meta.env.VITE_BACKEND_URL || 'https://backend.commander.tinytapeout.com'}/api/store`;
 
     const response = await fetch(url, {
       method: 'POST',
