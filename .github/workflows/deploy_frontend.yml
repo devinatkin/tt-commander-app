@@ -1,4 +1,4 @@
-name: Build and Deploy to GitHub Pages
+name: Build and Deploy Frontend to GitHub Pages
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build -- --base=/tt-commander-app/
+        run: npm run build -- --base=/tt-commander-app/frontend
 
       - name: Upload artifact for GitHub Pages
         uses: actions/upload-pages-artifact@v4
