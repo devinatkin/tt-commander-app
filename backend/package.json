@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/TinyTapeout/tt-commander-app#readme",
   "dependencies": {
-    "@google-cloud/storage": "^7.12.1",
+    "@aws-sdk/client-s3": "^3.1002.0",
     "@octokit/rest": "^21.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
