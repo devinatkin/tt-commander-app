@@ -1,9 +1,7 @@
 // Import express using ES module syntax
 import express from 'express';
 import cors from 'cors';
-import https from 'https';
 import http from 'http';
-import fs from 'fs';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { fetchLatestUF2Artifact } from './utils/github.js';
 
@@ -28,7 +26,7 @@ const S3_PREFIX = (process.env.S3_PREFIX || '').replace(/^\/+|\/+$/g, ''); // tr
 const s3 = new S3Client({
   region: S3_REGION,
   endpoint: S3_ENDPOINT,
-  forcePathStyle: S3_FORCE_PATH_STYLE, // important for many self-hosted S3 implementations
+  forcePathStyle: S3_FORCE_PATH_STYLE,
   credentials: {
     accessKeyId: S3_ACCESS_KEY_ID,
     secretAccessKey: S3_SECRET_ACCESS_KEY,
@@ -42,21 +40,26 @@ function makeObjectKey(filename) {
 // ---- Express app ----
 const app = express();
 
+// If you ever use secure cookies / absolute redirects behind Traefik:
+app.set('trust proxy', 1);
+
+const CORS_ORIGIN = process.env.CORS_ORIGIN || 'https://localhost:5173';
+
 app.use(
   cors({
-    origin: ['https://localhost:5173'],
+    origin: CORS_ORIGIN,
     credentials: true,
   }),
 );
 
 app.use(express.json());
 
-// Define a simple route to check the server setup
+// Health/basic route
 app.get('/api', (_req, res) => {
   res.send('Commander App Backend is running');
 });
 
-// Define a POST route to store data in an S3-compatible bucket (Garage)
+// Store JSON into S3-compatible bucket (Garage)
 app.post('/api/store', async (req, res) => {
   const data = req.body;
   console.log('POST received from client');
@@ -84,7 +87,7 @@ app.post('/api/store', async (req, res) => {
   }
 });
 
-// Define a GET route to retrieve the latest UF2 file from Github Artifacts
+// Retrieve latest UF2 from GitHub artifacts
 app.get('/api/latestUF2', async (_req, res) => {
   try {
     const filepath = await fetchLatestUF2Artifact(process.env.FIRMWARE_REPO);
@@ -100,43 +103,14 @@ app.get('/api/latestUF2', async (_req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(500).sendFile('error.txt');
+    res.status(500).send('error');
   }
 });
 
-// SSL certificate paths
-const privateKeyPath = 'key.pem'; // Update this path
-const certificatePath = 'cert.pem'; // Update this path
+// ---- HTTP only (Traefik terminates TLS) ----
+const PORT = parseInt(process.env.PORT || '3000', 10);
+const HOST = process.env.HOST || '0.0.0.0';
 
-let httpsServer;
-const httpsPort = 3000;
-
-try {
-  // Reading the SSL certificate and private key
-  const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
-  const certificate = fs.readFileSync(certificatePath, 'utf8');
-  const credentials = { key: privateKey, cert: certificate };
-
-  // Creating HTTPS server
-  httpsServer = https.createServer(credentials, app);
-
-  // Start the HTTPS server
-  httpsServer.listen(httpsPort, () => {
-    console.log(`HTTPS Server is listening at https://localhost:${httpsPort}/`);
-  });
-} catch (error) {
-  console.error(
-    'SSL certificates not found or could not be read. Falling back to HTTP.',
-  );
-
-  // Define HTTP port
-  const httpPort = 3000; // Change this port if needed
-
-  // Creating HTTP server
-  const httpServer = http.createServer(app);
-
-  // Start the HTTP server
-  httpServer.listen(httpPort, () => {
-    console.log(`HTTP Server is listening at http://localhost:${httpPort}/`);
-  });
-}
+http.createServer(app).listen(PORT, HOST, () => {
+  console.log(`HTTP Server is listening at http://${HOST}:${PORT}/`);
+});
