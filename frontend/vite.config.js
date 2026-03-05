@@ -29,6 +29,7 @@ const httpsOptions =
 
 export default defineConfig({
   plugins: [suidPlugin(), solidPlugin()],
+  base: process.env.BASE_URL || '/',
 
   server: {
     open: false,
