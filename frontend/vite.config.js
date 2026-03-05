@@ -4,7 +4,6 @@ import { defineConfig } from 'vite';
 import solidPlugin from 'vite-plugin-solid';
 import { execSync } from 'child_process';
 
-
 let commitHash = 'N/A';
 try {
   const gitRoot = path.resolve(__dirname, '..');
@@ -22,7 +21,7 @@ export default defineConfig({
     port: process.env.PORT || 5173,
     proxy: {
       '/api': {
-        target: 'http://backend:3000',
+        target: process.env.BACKEND_URL || 'https://backend.commander.tinytapeout.com',
         changeOrigin: true,
       },
     },
