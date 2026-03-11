@@ -57,7 +57,7 @@ export function TestPanel(props: ITestPanelProps) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ TEST_RESULT: result }),
+      body: JSON.stringify({ TEST_RESULT: result, timestamp: new Date().toISOString(), project: result.project }),
     });
 
     if (!response.ok) {
@@ -70,15 +70,16 @@ export function TestPanel(props: ITestPanelProps) {
   const TestAll = async () => {
     console.log('Test All');
 
-    const result = await props.device.testProjects();
-
+    const testResult = await props.device.testProjects();
+    const result = { ...testResult, project: 'All_Projects' };
     await storeTestResult(result);
   };
 
   const TestProject = async (project) => {
     console.log('Testing: ', project.macro);
 
-    const result = await props.device.testProject(project);
+    const testResult = await props.device.testProject(project);
+    const result = { ...testResult, project: project.macro };
 
     await storeTestResult(result);
   };

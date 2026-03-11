@@ -64,11 +64,12 @@ app.post('/api/store', async (req, res) => {
   const data = req.body;
   console.log('POST received from client');
 
-  const filename = `data_${Date.now()}.json`;
-  const key = makeObjectKey(filename);
-
   try {
     const body = JSON.stringify(data);
+
+    const filename = `data_${data.project}_${Date.now()}.json`;
+    const key = makeObjectKey(filename);
+
 
     await s3.send(
       new PutObjectCommand({
