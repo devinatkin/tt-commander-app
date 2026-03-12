@@ -67,20 +67,26 @@ export function TestPanel(props: ITestPanelProps) {
     console.log('Data stored');
   };
 
-  const TestAll = async () => {
-    console.log('Test All');
+const TestAll = async () => {
+  console.log('Test All');
 
-    const testResult = await props.device.testProjects();
-    const result = { ...testResult, project: 'All_Projects' };
-    await storeTestResult(result);
+  const testResult = await props.device.testProjects();
+  const result = {
+    TEST_RESULT: testResult,
+    project: 'All_Projects',
   };
+
+  await storeTestResult(result);
+};
 
   const TestProject = async (project) => {
     console.log('Testing: ', project.macro);
 
     const testResult = await props.device.testProject(project);
-    const result = { ...testResult, project: project.macro };
-
+    const result = {
+      TEST_RESULT: testResult,
+      project: project.title,
+    };
     await storeTestResult(result);
   };
 
